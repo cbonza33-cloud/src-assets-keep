@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 
-// Imports from your root directory
+// Using your root directory assets
 import faceCream from './face_cream2.jpg';
 import faceWash from './face_wash_gel.jpg';
 import sunScreen from './sun-screen.jpg';
 import perfume from './pholeric_perfume.jpg';
-import bodyLotion from './body-lotion.jpg';
-import oudWood from './oud_wood.jpg';
 import logo from './my_logo.png';
 
 const App = () => {
@@ -16,50 +14,59 @@ const App = () => {
     { id: 1, name: "Pholeric Face Cream", price: 250, img: faceCream },
     { id: 2, name: "Face Wash Gel", price: 180, img: faceWash },
     { id: 3, name: "Luxury Sunscreen", price: 220, img: sunScreen },
-    { id: 4, name: "Signature Perfume", price: 550, img: perfume },
-    { id: 5, name: "Body Lotion", price: 150, img: bodyLotion },
-    { id: 6, name: "Oud Wood", price: 450, img: oudWood }
+    { id: 4, name: "Signature Perfume", price: 550, img: perfume }
   ];
 
-  const addToCart = (product) => {
-    setCart([...cart, product]);
-  };
-
-  const calculateTotal = () => cart.reduce((sum, item) => sum + item.price, 0);
-
-  const sendWhatsAppOrder = () => {
-    const total = calculateTotal();
-    let message = `*New Order from Pholeric*%0A%0A`;
-    cart.forEach((item, i) => message += `${i + 1}. ${item.name} - R${item.price}%0A`);
-    message += `%0A*Total: R${total}*`;
-    window.open(`https://wa.me/27123456789?text=${message}`, '_blank');
-  };
+  const addToCart = (product) => setCart([...cart, product]);
 
   return (
-    <div style={{ backgroundColor: '#fff', minHeight: '100vh', fontFamily: 'sans-serif' }}>
-      {/* Black Header from Screenshot */}
-      <header style={{ backgroundColor: '#000', color: '#fff', textAlign: 'center', padding: '40px 20px' }}>
-        <img src={logo} alt="Pholeric" style={{ height: '45px', marginBottom: '15px' }} />
-        <h1 style={{ margin: 0, fontSize: '26px', letterSpacing: '4px', fontWeight: 'bold' }}>PHOLERIC</h1>
-        <p style={{ margin: '10px 0 0', fontSize: '12px', color: '#ccc', letterSpacing: '1px' }}>POWERED BY GOOD meddler</p>
+    <div style={{ backgroundColor: '#fff', minHeight: '100vh', fontFamily: '-apple-system, sans-serif' }}>
+      
+      {/* Exact Header from image_8.png */}
+      <header style={{ 
+        backgroundColor: '#000', 
+        color: '#fff', 
+        textAlign: 'center', 
+        padding: '35px 10px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      }}>
+        <img src={logo} alt="Logo" style={{ width: '45px', marginBottom: '15px' }} />
+        <h1 style={{ margin: 0, fontSize: '28px', letterSpacing: '5px', fontWeight: '900' }}>PHOLERIC</h1>
+        <p style={{ margin: '8px 0 0', fontSize: '11px', letterSpacing: '1px', opacity: 0.8 }}>POWERED BY GOOD meddler</p>
       </header>
 
-      {/* Product Grid with rounded cards */}
-      <div style={{ padding: '20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+      {/* The Product Grid */}
+      <div style={{ 
+        padding: '25px 15px', 
+        display: 'grid', 
+        gridTemplateColumns: '1fr 1fr', 
+        columnGap: '15px', 
+        rowGap: '30px' 
+      }}>
         {products.map(product => (
-          <div key={product.id} style={{ textAlign: 'center', marginBottom: '20px' }}>
+          <div key={product.id} style={{ display: 'flex', flexDirection: 'column' }}>
+            
+            {/* The Rounded Card Wrapper */}
             <div style={{ 
-              border: '1px solid #eee', 
+              border: '1px solid #f0f0f0', 
               borderRadius: '20px', 
-              overflow: 'hidden', 
-              padding: '10px',
+              padding: '15px',
               backgroundColor: '#fff',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
+              boxShadow: '0 4px 15px rgba(0,0,0,0.06)', // Soft shadow from screenshot
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              aspectRatio: '1/1'
             }}>
-              <img src={product.img} alt={product.name} style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '15px' }} />
+              <img src={product.img} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </div>
-            <h4 style={{ margin: '15px 0 5px', fontSize: '15px', fontWeight: 'bold' }}>{product.name}</h4>
-            <p style={{ margin: '5px 0', fontSize: '18px', fontWeight: 'bold' }}>R{product.price}</p>
+
+            {/* Text Styling from image_8.png */}
+            <h4 style={{ textAlign: 'center', margin: '15px 0 8px', fontSize: '15px', fontWeight: '700' }}>{product.name}</h4>
+            <p style={{ textAlign: 'center', margin: '0 0 15px', fontSize: '18px', fontWeight: '800' }}>R{product.price}</p>
+            
             <button 
               onClick={() => addToCart(product)}
               style={{ 
@@ -67,11 +74,10 @@ const App = () => {
                 color: '#fff', 
                 border: 'none', 
                 borderRadius: '8px', 
-                padding: '12px 0', 
+                padding: '14px 0', 
                 width: '100%', 
-                fontWeight: 'bold',
-                cursor: 'pointer',
-                marginTop: '10px'
+                fontWeight: '800',
+                fontSize: '13px'
               }}
             >
               Add to Cart
@@ -79,18 +85,6 @@ const App = () => {
           </div>
         ))}
       </div>
-
-      {/* Sticky Bottom Checkout for WhatsApp functionality */}
-      {cart.length > 0 && (
-        <div style={{ position: 'fixed', bottom: 0, width: '100%', padding: '20px', backgroundColor: '#fff', borderTop: '1px solid #eee' }}>
-          <button 
-            onClick={sendWhatsAppOrder}
-            style={{ width: '100%', padding: '15px', backgroundColor: '#25D366', color: '#fff', border: 'none', borderRadius: '10px', fontWeight: 'bold', fontSize: '16px' }}
-          >
-            Checkout (R{calculateTotal()})
-          </button>
-        </div>
-      )}
     </div>
   );
 };
