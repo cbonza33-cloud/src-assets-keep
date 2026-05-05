@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
-// Importing your images directly from the main list
+// Corrected imports to match your GitHub file names exactly
 import faceCream from './face_cream2.jpg';
 import faceWash from './face_wash_gel.jpg';
 import sunScreen from './sun-screen.jpg';
-import perfume from './pholerice_perfume.jpg';
+import perfume from './pholeric_perfume.jpg';
 import logo from './my_logo.png';
 
 const App = () => {
@@ -32,7 +32,7 @@ const App = () => {
     });
     message += `%0A*Total: R${total}*`;
     
-    // Using South African country code for the business line
+    // Using your business logic for WhatsApp checkout
     window.open(`https://wa.me/27123456789?text=${message}`, '_blank');
   };
 
