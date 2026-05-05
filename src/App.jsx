@@ -1,132 +1,69 @@
-import React, { useState, useRef } from 'react';
-// Importing the images you uploaded to GitHub
-import bodyOil from './assets/body_oil.jpg';
-// Add more imports here as you upload them, e.g.:
-// import facialCream from './assets/facial_cream.jpg';
+import React, { useState } from 'react';
 
-const PholericApp = () => {
+// Importing images directly from the root
+import faceCream from './face_cream2.jpg';
+import faceWash from './face_wash_gel.jpg';
+import sunScreen from './sun-screen.jpg';
+import perfume from './pholerice_perfume.jpg';
+import logo from './my_logo.png';
+
+const App = () => {
   const [cart, setCart] = useState([]);
-  const [view, setView] = useState('home'); // home, shop, cart, invoice
-  const invoiceRef = useRef();
+  const [view, setView] = useState('shop'); 
 
-  // Your product data structure
   const products = [
-    {
-      id: 1,
-      name: "Pholeric Body Oil",
-      price: 150,
-      img: bodyOil,
-      badge: "BESTSELLER",
-      description: "Premium African beauty oil for glowing skin."
-    },
-    // You can add more product objects here following this format
+    { id: 1, name: "Luxury Face Cream", price: 250, img: faceCream },
+    { id: 2, name: "Gentle Face Wash", price: 180, img: faceWash },
+    { id: 3, name: "Daily Sunscreen", price: 220, img: sunScreen },
+    { id: 4, name: "Pholeric Signature Perfume", price: 550, img: perfume },
+    { id: 5, name: "Organic Shea Butter", price: 150, img: faceCream } // Wildcard option
   ];
 
   const addToCart = (product) => {
-    setCart([...cart, { ...product, orderId: Math.floor(Math.random() * 1000000) }]);
+    setCart([...cart, product]);
     alert(`${product.name} added to cart!`);
   };
 
   const calculateTotal = () => cart.reduce((sum, item) => sum + item.price, 0);
 
-  // The WhatsApp checkout logic for local business communication
   const sendWhatsAppOrder = () => {
     const total = calculateTotal();
     let message = `*New Order from Pholeric*%0A%0A`;
     cart.forEach((item, index) => {
       message += `${index + 1}. ${item.name} - R${item.price}%0A`;
     });
-    message += `%0A*Total: R${total}*%0A%0AItems ready for collection/delivery.`;
-    
-    // Replace with your business WhatsApp number
+    message += `%0A*Total: R${total}*`;
+    // Using South African country code for WhatsApp
     window.open(`https://wa.me/27123456789?text=${message}`, '_blank');
   };
 
   return (
-    <div style={{ 
-      fontFamily: 'sans-serif', 
-      maxWidth: '430px', // Mobile-first constraint
-      margin: '0 auto', 
-      backgroundColor: '#f9f9f9', 
-      minHeight: '100vh',
-      paddingBottom: '80px' 
-    }}>
-      {/* Header */}
+    <div style={{ fontFamily: 'sans-serif', maxWidth: '430px', margin: '0 auto', backgroundColor: '#fff', minHeight: '100vh' }}>
       <header style={{ backgroundColor: '#000', color: '#fff', padding: '20px', textAlign: 'center' }}>
-        <h1 style={{ margin: 0, letterSpacing: '2px' }}>PHOLERIC</h1>
-        <p style={{ fontSize: '12px', margin: '5px 0 0' }}>AFRICAN BEAUTY</p>
+        <img src={logo} alt="Pholeric" style={{ height: '40px' }} />
+        <h1 style={{ margin: 0, fontSize: '20px', letterSpacing: '2px' }}>PHOLERIC</h1>
       </header>
 
-      {/* Navigation & Views */}
-      <div style={{ padding: '20px' }}>
-        {view === 'home' && (
-          <div style={{ textAlign: 'center' }}>
-            <h2>Welcome to Pholeric</h2>
-            <p>High-performance beauty products for your skin.</p>
-            <button 
-              onClick={() => setView('shop')}
-              style={{ backgroundColor: '#000', color: '#fff', padding: '15px 30px', border: 'none', borderRadius: '5px' }}
-            >
-              Shop Now
-            </button>
+      <div style={{ padding: '20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+        {products.map(product => (
+          <div key={product.id} style={{ border: '1px solid #eee', borderRadius: '8px', padding: '10px', textAlign: 'center' }}>
+            <img src={product.img} alt={product.name} style={{ width: '100%', borderRadius: '5px' }} />
+            <h4 style={{ fontSize: '14px', margin: '10px 0' }}>{product.name}</h4>
+            <p>R{product.price}</p>
+            <button onClick={() => addToCart(product)} style={{ backgroundColor: '#000', color: '#fff', border: 'none', padding: '8px', width: '100%', borderRadius: '4px' }}>Add</button>
           </div>
-        )}
-
-        {view === 'shop' && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-            {products.map(product => (
-              <div key={product.id} style={{ backgroundColor: '#fff', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}>
-                <img src={product.img} alt={product.name} style={{ width: '100%', height: '150px', objectFit: 'cover' }} />
-                <div style={{ padding: '10px' }}>
-                  <span style={{ fontSize: '10px', fontWeight: 'bold', color: '#d4af37' }}>{product.badge}</span>
-                  <h4 style={{ margin: '5px 0' }}>{product.name}</h4>
-                  <p style={{ fontWeight: 'bold' }}>R{product.price}</p>
-                  <button 
-                    onClick={() => addToCart(product)}
-                    style={{ width: '100%', padding: '8px', backgroundColor: '#000', color: '#fff', border: 'none', borderRadius: '5px' }}
-                  >
-                    Add to Cart
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {view === 'cart' && (
-          <div>
-            <h3>Your Shopping Cart ({cart.length} items)</h3>
-            {cart.map((item, index) => (
-              <div key={index} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid #ddd' }}>
-                <span>{item.name}</span>
-                <span>R{item.price}</span>
-              </div>
-            ))}
-            <div style={{ marginTop: '20px', textAlign: 'right' }}>
-              <h4>Total: R{calculateTotal()}</h4>
-              <button 
-                onClick={sendWhatsAppOrder}
-                style={{ width: '100%', padding: '15px', backgroundColor: '#25D366', color: '#fff', border: 'none', borderRadius: '5px', fontWeight: 'bold' }}
-              >
-                Checkout via WhatsApp
-              </button>
-            </div>
-          </div>
-        )}
+        ))}
       </div>
 
-      {/* Bottom Navigation Bar */}
-      <nav style={{ 
-        position: 'fixed', bottom: 0, width: '100%', maxWidth: '430px', 
-        backgroundColor: '#fff', display: 'flex', justifyContent: 'space-around', 
-        padding: '15px 0', borderTop: '1px solid #ddd', zIndex: 100 
-      }}>
-        <button onClick={() => setView('home')} style={{ background: 'none', border: 'none' }}>🏠</button>
-        <button onClick={() => setView('shop')} style={{ background: 'none', border: 'none' }}>🛍️</button>
-        <button onClick={() => setView('cart')} style={{ background: 'none', border: 'none' }}>🛒 ({cart.length})</button>
-      </nav>
+      {cart.length > 0 && (
+        <div style={{ position: 'fixed', bottom: 0, width: '100%', maxWidth: '430px', padding: '20px', backgroundColor: '#fff', borderTop: '2px solid #000' }}>
+          <button onClick={sendWhatsAppOrder} style={{ width: '100%', padding: '15px', backgroundColor: '#25D366', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold' }}>
+            Order via WhatsApp (R{calculateTotal()})
+          </button>
+        </div>
+      )}
     </div>
   );
 };
 
-export default PholericApp;
+export default App;
